@@ -9,8 +9,6 @@ local function imports(request)
     local _f = 'imports'
     local items = request.items
     local updateDate = request.updateDate
-    log.info(items)
-    log.info(updateDate)
     -- Валидация данных
 
     local is_validated = true
@@ -22,26 +20,28 @@ local function imports(request)
         local type = item.type
         local price = item.price
 
-        log.info(parentId)
-        local parent = box.space.items.index.primary:get(parentId)
-        local item_obj = box.space.items.index.primary:get(id)
 
-        if item_obj ~= nil then
-            if item_obj.item_type ~= ITEM_TYPE[type] then
-                is_validated = false
-            end
-        end
-
-
-        if parent ~= nil then
-            if parent.item_type ~= ITEM_TYPE['CATEGORY'] then
-                local line = debug.getinfo(2, 'l').currentline
-                log.info({item, line})
+        local elem = box.space.items.index.primary:get(id)
+        if elem ~= nil then
+            if elem.item_type ~= ITEM_TYPE[type] then
                 is_validated = false
             end
         else
-            if parentId ~= 'None' then
-                box.space.items:insert { parentId, '', ITEM_TYPE['CATEGORY'], box.NULL, updateDate, box.NULL, false }
+            if ITEM_TYPE[type] == ITEM_TYPE.CATEGORY then
+                box.space.items:insert { id, name, ITEM_TYPE.CATEGORY, box.NULL, updateDate, parentId, false, 0 }
+            else
+                box.space.items:insert { id, name, ITEM_TYPE.OFFER, price, updateDate, parentId, false, 1 }
+            end
+        end
+
+        if parentId ~= 'None' then
+            local parent = box.space.items.index.primary:get(parentId)
+            if parent ~= nil then
+                if parent.item_type ~= ITEM_TYPE.CATEGORY then
+                    is_validated = false
+                end
+            else
+                box.space.items:insert { parentId, '', ITEM_TYPE.CATEGORY, box.NULL, updateDate, box.NULL, false, 0 }
             end
         end
 
@@ -62,28 +62,30 @@ local function imports(request)
         local price = item.price
 
         local info = box.space.items:get(id)
-        log.info(info)
-        if info ~= nil then
+
+        -- Заносим данные в историю
+
+        ---
+        if type == 'OFFER' then
             box.space.items.index.primary:update(id, {
-                { '=', 2, name }, -- name
-                { '=', 5, updateDate }, -- updateDate
-                { '=', 7, true }
+                { '=', 4, price } -- price
             })
-            if parentId ~= 'None' then
-                box.space.items.index.primary:update(id, {
-                    { '=', 6, parentId } -- parentId
-                })
-            end
-            if type == 'OFFER' then
-                box.space.items.index.primary:update(id, {
-                    { '=', 4, price } -- price
-                })
-            end
+        end
+
+        box.space.items.index.primary:update(id, {
+            { '=', 2, name }, -- name
+            { '=', 5, updateDate }, -- updateDate
+            { '=', 7, true }
+        })
+
+        
+
+        if parentId ~= 'None' then
+            
         else
-            if parentId == 'None' then
-                parentId = box.NULL
-            end
-            box.space.items:insert { id, name, ITEM_TYPE[type], price, updateDate, parentId, true }
+            box.space.items.index.primary:update(id, {
+                { '=', 6, box.NULL }
+            })
         end
     end
     box.commit()

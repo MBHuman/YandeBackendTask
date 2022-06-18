@@ -3,7 +3,8 @@
 from http.client import responses
 from fastapi import (APIRouter)
 from fastapi.exceptions import RequestValidationError
-from core.api.models import (ShopUnitImportRequest, Error)
+from core.api.models import (
+    ShopUnitImportRequest, Error, ShopUnitStatisticUnit)
 from core.api.models import ShopUnit, ShopUnitStatisticResponse
 from core.api.models import Datetime
 from core.api.services import delete_service, imports_service, nodes_serivce, sales_service, statistic_service
@@ -14,7 +15,7 @@ from core.util import get_settings
 from uuid import UUID
 from core.src.remove_422 import remove_422
 import functools
-from datetime import datetime
+from datetime import datetime, timedelta
 from pydantic.datetime_parse import parse_datetime
 
 __all__ = ['router']
@@ -128,21 +129,22 @@ async def nodes(id: UUID):
         typeUnit = 'CATEGORY' if e[0][2] == 2 else 'OFFER'
         price = e[0][3]
         date_timestamp = e[0][4]
-        date = datetime.isoformat(datetime.utcfromtimestamp(date_timestamp), sep="T", timespec='milliseconds') + 'Z'
+        date = datetime.isoformat(datetime.utcfromtimestamp(
+            date_timestamp), sep="T", timespec='milliseconds') + 'Z'
         parentId = e[0][5]
         if parentId not in mp:
             mp[parentId] = [[], 0]
         if id_in in mp:
             mp[parentId][1] += mp[id_in][1]
-            mp[parentId][0].append(ShopUnit(id=id_in, name=name, date=date, parentId=parentId, type=typeUnit, price=mp[id_in][1], children=mp[id_in][0]))
+            mp[parentId][0].append(ShopUnit(id=id_in, name=name, date=date, parentId=parentId,
+                                   type=typeUnit, price=mp[id_in][1], children=mp[id_in][0]))
             del mp[id_in]
         else:
             mp[parentId][1] += price
-            mp[parentId][0].append(ShopUnit(id=id_in, name=name, date=date, parentId=parentId, type=typeUnit, price=price))
+            mp[parentId][0].append(ShopUnit(
+                id=id_in, name=name, date=date, parentId=parentId, type=typeUnit, price=price))
     log.info(mp)
     return mp[main_parent][0]
-
-
 
 
 @router2.get("/sales",
@@ -158,7 +160,17 @@ async def nodes(id: UUID):
              description=descriptions.sales)
 @remove_422
 async def sales(date: Datetime):
-    await sales_service(date=date)
+    date_to = parse_datetime(date).timestamp()
+    date_from = (parse_datetime(date) - timedelta(hours=24)).timestamp()
+    result = await db.run('api_read.sales', date_from, date_to)
+    items = [ShopUnitStatisticUnit(id=res[0],
+                                   name=res[1],
+                                   parentId=res[5],
+                                   type='CATEGORY' if res[2] == 2 else 'OFFER',
+                                   price=res[3],
+                                   date=datetime.isoformat(datetime.utcfromtimestamp(res[4]), sep="T", timespec='milliseconds') + 'Z')
+             for res in result[0]]
+    return ShopUnitStatisticResponse(items=items)
 
 
 @router2.get('/node/{id}/statistic',
@@ -178,7 +190,7 @@ async def sales(date: Datetime):
                               }},
                         200: {"model": ShopUnitStatisticResponse,
                               "description": "Статистика по элементу."}},
-             description=descriptions.nodes)
+             description=descriptions.statistic)
 @remove_422
 async def statistic(id: UUID, dateStart: Datetime, dateEnd: Datetime):
     await statistic_service(id=id, dateStart=dateStart, dateEnd=dateEnd)
