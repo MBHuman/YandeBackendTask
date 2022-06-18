@@ -1,0 +1,29 @@
+INFO     2022-06-18 03:28:11.958 request id: app - uvicorn.server:serve - Started server process [24777]
+INFO     2022-06-18 03:28:11.961 request id: app - uvicorn.lifespan.on:startup - Waiting for application startup.
+ERROR    2022-06-18 03:28:11.963 request id: None - core.util.db_dao:create_connection - {create_connection connection is None}
+DEBUG    2022-06-18 03:28:11.964 request id: app - asynctnt.connection:_set_state - Changing state DISCONNECTED -> CONNECTING
+DEBUG    2022-06-18 03:28:11.983 request id: app - uvicorn.server:run - Tarantool[localhost:3301] Authorized successfully
+INFO     2022-06-18 03:28:11.987 request id: app - asynctnt.connection:_connect - Tarantool[localhost:3301] Connected successfully
+DEBUG    2022-06-18 03:28:11.990 request id: app - asynctnt.connection:_set_state - Changing state CONNECTING -> CONNECTED
+INFO     2022-06-18 03:28:11.993 request id: None - core.util.db_dao:create_connection - True True self.connection=<asynctnt.Connection host=localhost port=3301 state=<ConnectionState.CONNECTED: 2>>
+INFO     2022-06-18 03:28:11.996 request id: app - uvicorn.lifespan.on:startup - Application startup complete.
+INFO     2022-06-18 03:28:12.001 request id: app - uvicorn.server:startup - Uvicorn running on http://0.0.0.0:89 (Press CTRL+C to quit)
+INFO     2022-06-18 03:29:01.286 request id: app - uvicorn.server:shutdown - Shutting down
+INFO     2022-06-18 03:29:01.396 request id: app - uvicorn.lifespan.on:shutdown - Waiting for application shutdown.
+INFO     2022-06-18 03:29:01.399 request id: app - uvicorn.lifespan.on:shutdown - Application shutdown complete.
+INFO     2022-06-18 03:29:01.401 request id: app - uvicorn.server:serve - Finished server process [24777]
+INFO     2022-06-18 03:29:07.069 request id: app - uvicorn.server:serve - Started server process [24825]
+INFO     2022-06-18 03:29:07.076 request id: app - uvicorn.lifespan.on:startup - Waiting for application startup.
+ERROR    2022-06-18 03:29:07.080 request id: None - core.util.db_dao:create_connection - {create_connection connection is None}
+DEBUG    2022-06-18 03:29:07.080 request id: app - asynctnt.connection:_set_state - Changing state DISCONNECTED -> CONNECTING
+DEBUG    2022-06-18 03:29:07.105 request id: app - uvicorn.server:run - Tarantool[localhost:3301] Authorized successfully
+INFO     2022-06-18 03:29:07.108 request id: app - asynctnt.connection:_connect - Tarantool[localhost:3301] Connected successfully
+DEBUG    2022-06-18 03:29:07.110 request id: app - asynctnt.connection:_set_state - Changing state CONNECTING -> CONNECTED
+INFO     2022-06-18 03:29:07.112 request id: None - core.util.db_dao:create_connection - True True self.connection=<asynctnt.Connection host=localhost port=3301 state=<ConnectionState.CONNECTED: 2>>
+INFO     2022-06-18 03:29:07.119 request id: app - uvicorn.lifespan.on:startup - Application startup complete.
+INFO     2022-06-18 03:29:07.123 request id: app - uvicorn.server:startup - Uvicorn running on http://0.0.0.0:89 (Press CTRL+C to quit)
+ERROR    2022-06-18 03:30:12.096 request id: None - core.util.db_dao:run - database call error api_write.imports ('{"items": [{"id": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "name": "string", "parentId": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "type": "OFFER", "price": 0}], "updateDate": "2022-05-28T21:12:01"}',) (33, "Procedure 'api_write.imports' is not defined")
+INFO     2022-06-18 03:30:34.561 request id: app - uvicorn.server:shutdown - Shutting down
+INFO     2022-06-18 03:30:34.665 request id: app - uvicorn.lifespan.on:shutdown - Waiting for application shutdown.
+INFO     2022-06-18 03:30:34.668 request id: app - uvicorn.lifespan.on:shutdown - Application shutdown complete.
+INFO     2022-06-18 03:30:34.670 request id: app - uvicorn.server:serve - Finished server process [24825]

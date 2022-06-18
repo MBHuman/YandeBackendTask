@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  # api:
+  #   build: core/.
+  #   ports:
+  #     - "80:80"
+
+  tarantool:
+    build: database/
+    ports:
+      - "3301:3301"
+    environment:
+      - TARANTOOL_USER_NAME=admin
+      - TARANTOOL_USER_PASSWORD=example
+    tty: true
