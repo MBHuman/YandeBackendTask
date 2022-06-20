@@ -27,7 +27,7 @@ format_items_storage[4] = { name = 'price', type = 'integer', is_nullable = true
 format_items_storage[5] = { name = 'date_timestamp', type = 'number', is_nullable = false }
 format_items_storage[6] = { name = 'parent_id', type = 'string', is_nullable = true }
 format_items_storage[7] = { name = 'is_created', type = 'boolean', is_nullable = false }
-format_items_storage[8] = { name = 'child_nums', type = 'number', is_nullable = false}
+format_items_storage[8] = { name = 'child_nums', type = 'number', is_nullable = false }
 
 -- local format_changed_items = {}
 -- format_changed_items[1] = { name ='id', type = 'string', is_nullable = false}

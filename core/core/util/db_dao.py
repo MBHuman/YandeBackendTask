@@ -2,7 +2,7 @@ from typing import Tuple, Any, NoReturn, Union
 import asynctnt
 from fastapi import HTTPException, status
 from fastapi.exceptions import RequestValidationError
-from core.util.exceptions import ItemNotFound
+from core.util.schemas import ItemNotFound
 
 
 class DatabaseDao:

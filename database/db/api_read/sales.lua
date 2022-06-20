@@ -8,9 +8,9 @@ function sales(from_timestamp, to_timestamp)
     checks('number', 'number')
     local result = {}
 
-    for _, e in box.space.items.index.date_timestamp:pairs({to_timestamp, ITEM_TYPE['OFFER']}, {iterator='LT'}) do
+    for _, e in box.space.items.index.date_timestamp:pairs({to_timestamp, ITEM_TYPE['OFFER']}, {iterator='LE'}) do
         table.insert(result, e)
-        if e.date_timestamp < from_timestamp then
+        if e.date_timestamp <= from_timestamp then
             goto continue 
         end
     end

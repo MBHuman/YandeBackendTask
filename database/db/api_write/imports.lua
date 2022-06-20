@@ -72,20 +72,38 @@ local function imports(request)
             })
         end
 
+        if parentId == 'None' then
+            box.space.items.index.primary:update(id, {
+                { '=', 6, box.NULL }
+            })
+        else
+            box.space.items.index.primary:update(id, {
+                { '=', 6, parentId }
+            })
+        end
+
         box.space.items.index.primary:update(id, {
             { '=', 2, name }, -- name
             { '=', 5, updateDate }, -- updateDate
             { '=', 7, true }
         })
+        local q = util.Queue:new()
+        q:enqueue(id)
 
-        
-
-        if parentId ~= 'None' then
-            
-        else
-            box.space.items.index.primary:update(id, {
-                { '=', 6, box.NULL }
-            })
+        while not q:isEmpty() do
+            local cur = q:dequeue()
+            local elem = box.space.items.index.primary:get(cur)
+            log.info(string.format("%s: %s", elem.id, elem.parent_id))
+            box.space.items.index.primary:update(cur, { { '=', 5, updateDate } })
+            if elem.parent_id == box.NULL then
+                goto continue
+            end
+            local parent = box.space.items.index.primary:get(elem.parent_id)
+            log.info(parent)
+            if parent ~= nil then
+                q:enqueue(parent.id)
+            end
+            ::continue::
         end
     end
     box.commit()

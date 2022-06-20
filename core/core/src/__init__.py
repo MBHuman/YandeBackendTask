@@ -1,6 +1,6 @@
 
 __all__ = [
-    'app'
+    'get_app'
 ]
 __author__ = 'Evgeny Dmitriev'
 __version__ = '0.1.0'

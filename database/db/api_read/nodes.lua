@@ -7,10 +7,10 @@ _G.ERRORS:register("nodes", 404)
 
 local function nodes(id)
     checks('string')
-    _f = 'nodes'
+    local _f = 'nodes'
 
     local elem = box.space.items.index.primary:get(id)
-    if elem == nil then
+    if elem == nil or not elem.is_created then
         util.res_except(_f, 404, "Item not found")
     end
 

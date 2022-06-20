@@ -1,5 +1,5 @@
 import uvicorn
-from core.util import get_settings
+from core.util.settings import get_settings
 from core.src import get_app
 
 __all__ = []

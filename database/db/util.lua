@@ -4,6 +4,7 @@ local log = require('log')
 
 local _M = {}
 
+
 local Queue = {}
 
 function Queue:new()
@@ -63,7 +64,6 @@ function Queue:optimize()
     self.list = new
 end
 
-_M.Queue = Queue
 
 function _M.res_except(func, code, msg)
     checks('string', 'number', 'string')
@@ -82,5 +82,7 @@ function _M.res_except(func, code, msg)
     local reason = reason:gsub('\"', '\\"') -- экранирование ковычек для nginx
     box.error({ code = code, reason = reason })
 end
+
+_M.Queue = Queue
 
 return _M

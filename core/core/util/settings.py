@@ -2,7 +2,6 @@ from loguru import logger
 from pydantic import PyObject
 from core.util.db_dao import DatabaseDao
 from core.util.advlogger import CustomizeLogger
-import json
 
 __all__ = []
 
@@ -23,7 +22,7 @@ env_data = {
     "DESCRIPTION": "Вступительное задание в Летнюю Школу Бэкенд Разработки Яндекса 2022",
     "APP_VERSION": "1.0",
     "APP_HOST": "0.0.0.0",
-    "APP_PORT": 90,
+    "APP_PORT": 80,
     "API_ROOT_PATH": "",
 
     "DB_HOST": "localhost",

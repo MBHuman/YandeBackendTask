@@ -1,9 +1,10 @@
 version: "3.9"
 services:
-  # api:
-  #   build: core/.
-  #   ports:
-  #     - "80:80"
+  api:
+    build: core/.
+    ports:
+      - "80:80"
+    restart: always
 
   tarantool:
     build: database/
@@ -13,3 +14,4 @@ services:
       - TARANTOOL_USER_NAME=admin
       - TARANTOOL_USER_PASSWORD=example
     tty: true
+    restart: always

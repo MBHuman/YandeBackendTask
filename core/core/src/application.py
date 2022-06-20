@@ -4,12 +4,11 @@ from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from core.util.exceptions import ItemNotFound
-
-from core.src.remove_422 import remove_422s
-from core.util import get_settings
-from core.api.router import router as main_router, router2 as advanced_router
-from core.api.models import Error
+from core.util.remove_422 import remove_422s
+from core.util.schemas import Error, ItemNotFound
+from core.util.settings import get_settings
+from core.api.advanced import router as advanced_router
+from core.api.base import router as main_router
 
 
 __all__ = ['get_app']

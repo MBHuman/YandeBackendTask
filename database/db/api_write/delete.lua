@@ -6,7 +6,7 @@ _G.ERRORS:register("delete", 400)
 
 local function delete(id)
     checks('string')
-    _f = 'delete'
+    local _f = 'delete'
 
     local elem = box.space.items.index.primary:get(id)
     if elem == nil then
@@ -20,7 +20,7 @@ local function delete(id)
     while not q:isEmpty() do
         local cur = q:dequeue()
         box.space.items.index.primary:delete(cur)
-        for _, child in box.space.items.index.parent_id:pairs({cur, true}) do
+        for _, child in box.space.items.index.parent_id:pairs({ cur, true }) do
             q:enqueue(child.id)
         end
     end
