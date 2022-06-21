@@ -5,6 +5,7 @@ services:
     ports:
       - "80:80"
     restart: always
+    command: gunicorn --workers=14 -b 0.0.0.0:80 -k uvicorn.workers.UvicornWorker main:app
 
   tarantool:
     build: database/

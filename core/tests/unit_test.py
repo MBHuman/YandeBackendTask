@@ -183,7 +183,7 @@ EXPECTED_TREE_2 = {
     "name": "Категория",
     "parentId": None,
     "type": "CATEGORY",
-    "price": 0,
+    "price": None,
     "date": "2002-05-28T21:12:01.000Z",
     "children": []
 }

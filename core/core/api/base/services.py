@@ -61,43 +61,30 @@ async def nodes_service(id: UUID):
     mp = {}
     if len(result[0]) == 0:
         raise ItemNotFound()
-    main_parent = result[0][0][0][5]
-
     response_data = None
-    if len(result[0]) > 1:
-        for _, e in enumerate(reversed(result[0])):
-            id_in = e[0][0]
-            name = e[0][1]
-            typeUnit = 'CATEGORY' if e[0][2] == 2 else 'OFFER'
-            price = e[0][3]
-            date_timestamp = e[0][4]
-            date = datetime.isoformat(datetime.utcfromtimestamp(
-                date_timestamp), sep="T", timespec='milliseconds') + 'Z'
-            parentId = e[0][5]
-            if parentId not in mp:
-                mp[parentId] = [[], 0, 0]
-            if id_in in mp:
-                mp[parentId][2] += mp[id_in][2]
-                mp[parentId][1] += mp[id_in][1]
-                mp[parentId][0].append(ShopUnit(id=id_in, name=name, date=date, parentId=parentId,
-                                    type=typeUnit, price=(mp[id_in][1] // mp[id_in][2]), children=mp[id_in][0]))
-                del mp[id_in]
-            else:
-                mp[parentId][2] += 1
-                mp[parentId][1] += price
-                mp[parentId][0].append(ShopUnit(
-                    id=id_in, name=name, date=date, parentId=parentId, type=typeUnit, price=price))
-        response_data = mp[main_parent][0][0]
-    else:
-        e = result[0][0]
+
+    for _, e in enumerate(reversed(result[0])):
         id_in = e[0][0]
         name = e[0][1]
         typeUnit = 'CATEGORY' if e[0][2] == 2 else 'OFFER'
-        price = 0 if e[0][3] == None else e[0][3]
+        price = e[0][3]
         date_timestamp = e[0][4]
         date = datetime.isoformat(datetime.utcfromtimestamp(
-                date_timestamp), sep="T", timespec='milliseconds') + 'Z'
+            date_timestamp), sep="T", timespec='milliseconds') + 'Z'
         parentId = e[0][5]
-        children = [] if typeUnit == 'CATEGORY' else None
-        response_data = ShopUnit(id=id, name=name, date=date, parentId=parentId, type=typeUnit, price=price, children=children)
+        if parentId not in mp:
+            mp[parentId] = [[], 0, 0]
+        if id_in in mp:
+            mp[parentId][2] += mp[id_in][2]
+            mp[parentId][1] += mp[id_in][1]
+            mp[parentId][0].append(ShopUnit(id=id_in, name=name, date=date, parentId=parentId,
+                                type=typeUnit, price=(mp[id_in][1] // mp[id_in][2]), children=mp[id_in][0]))
+            del mp[id_in]
+        else:
+            mp[parentId][2] += 1
+            mp[parentId][1] += (0 if typeUnit == 'CATEGORY' else price)
+            mp[parentId][0].append(ShopUnit(
+                id=id_in, name=name, date=date, parentId=parentId, type=typeUnit, price=(None if typeUnit == 'CATEGORY' else price), children=([] if typeUnit == 'CATEGORY' else None)))
+    for e in mp:
+        response_data = mp[e][0][0]
     return response_data

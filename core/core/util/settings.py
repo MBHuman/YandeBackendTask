@@ -25,7 +25,7 @@ env_data = {
     "APP_PORT": 80,
     "API_ROOT_PATH": "",
 
-    "DB_HOST": "localhost",
+    "DB_HOST": "tarantool",
     "DB_PORT": '3301',
     "DB_USER": "admin",
     "DB_PASSWORD": "example"
