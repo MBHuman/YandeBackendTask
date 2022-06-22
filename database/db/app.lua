@@ -38,6 +38,7 @@ if not box.space[ITEMS_SPACE] then
     s:create_index('primary', { type = 'tree', parts = { 'id' }, unique = true })
     s:create_index('date_timestamp', { type = 'tree', parts = { 'date_timestamp', 'item_type' }, unique = false })
     s:create_index('parent_id', { type = 'tree', parts = { 'parent_id', 'is_created' }, unique = false })
+    s:create_index('created', { type = 'tree', parts = { 'is_created' }, unique = false })
 end
 
 _G.ITEM_TYPE = ITEM_TYPE

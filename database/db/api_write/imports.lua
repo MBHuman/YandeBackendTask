@@ -1,7 +1,6 @@
 local util = require('util')
 local log = require('log')
 
-
 _G.ERRORS:register("imports", 400)
 
 local function imports(request)
@@ -20,17 +19,19 @@ local function imports(request)
         local type = item.type
         local price = item.price
 
-
         local elem = box.space.items.index.primary:get(id)
         if elem ~= nil then
             if elem.item_type ~= ITEM_TYPE[type] then
                 is_validated = false
             end
+            if elem.item_type == ITEM_TYPE.CATEGORY then
+                box.space.items.index.primary:update(id, {{'=', 7, true}})
+            end
         else
             if ITEM_TYPE[type] == ITEM_TYPE.CATEGORY then
-                box.space.items:insert { id, name, ITEM_TYPE.CATEGORY, box.NULL, updateDate, parentId, false, 0 }
+                box.space.items:insert{id, name, ITEM_TYPE.CATEGORY, box.NULL, updateDate, parentId, true, 0}
             else
-                box.space.items:insert { id, name, ITEM_TYPE.OFFER, price, updateDate, parentId, false, 1 }
+                box.space.items:insert{id, name, ITEM_TYPE.OFFER, price, updateDate, parentId, true, 1}
             end
         end
 
@@ -41,7 +42,7 @@ local function imports(request)
                     is_validated = false
                 end
             else
-                box.space.items:insert { parentId, '', ITEM_TYPE.CATEGORY, box.NULL, updateDate, box.NULL, false, 0 }
+                box.space.items:insert{parentId, '', ITEM_TYPE.CATEGORY, box.NULL, updateDate, box.NULL, false, 0}
             end
         end
 
@@ -50,7 +51,8 @@ local function imports(request)
         end
     end
     ::p_end::
-    if not is_validated then
+    local undefinedElemsCount = box.space.items.index.created:count({false})
+    if not is_validated or undefinedElemsCount ~= 0 then
         util.res_except(_f, 400, "ValidationFailed")
     end
 
@@ -67,26 +69,19 @@ local function imports(request)
 
         ---
         if type == 'OFFER' then
-            box.space.items.index.primary:update(id, {
-                { '=', 4, price } -- price
+            box.space.items.index.primary:update(id, {{'=', 4, price} -- price
             })
         end
 
         if parentId == 'None' then
-            box.space.items.index.primary:update(id, {
-                { '=', 6, box.NULL }
-            })
+            box.space.items.index.primary:update(id, {{'=', 6, box.NULL}})
         else
-            box.space.items.index.primary:update(id, {
-                { '=', 6, parentId }
-            })
+            box.space.items.index.primary:update(id, {{'=', 6, parentId}})
         end
 
-        box.space.items.index.primary:update(id, {
-            { '=', 2, name }, -- name
-            { '=', 5, updateDate }, -- updateDate
-            { '=', 7, true }
-        })
+        box.space.items.index.primary:update(id, {{'=', 2, name}, -- name
+        {'=', 5, updateDate}, -- updateDate
+        {'=', 7, true}})
         local q = util.Queue:new()
         q:enqueue(id)
 
@@ -94,7 +89,7 @@ local function imports(request)
             local cur = q:dequeue()
             local elem = box.space.items.index.primary:get(cur)
             log.info(string.format("%s: %s", elem.id, elem.parent_id))
-            box.space.items.index.primary:update(cur, { { '=', 5, updateDate } })
+            box.space.items.index.primary:update(cur, {{'=', 5, updateDate}})
             if elem.parent_id == box.NULL then
                 goto continue
             end
