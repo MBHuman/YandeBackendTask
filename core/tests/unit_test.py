@@ -4,6 +4,7 @@ import json
 import re
 import subprocess
 import sys
+from urllib import response
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -12,6 +13,143 @@ API_BASEURL = "http://localhost:80"
 
 ROOT_ID = "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1"
 ROOT_ID_2 = "23f3dafa-ff44-4d09-a489-38e14725f5f1"
+ROOT_ID_3 = "98883e8f-0507-482f-bce2-2fb306cf6483"
+ROOT_ID_4 = "d515e43f-f3f6-4471-bb77-6b455017a2d2"
+ROOT_ID_5 = "863e1a7a-1304-42ae-943b-179184c077e3"
+
+ERROR_IMPORTS = [
+    {
+        "items": [
+            {
+                "type": "CATEGORY",
+                "name": "Товары",
+                "id": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+                "parentId": None,
+                "price": None
+            },
+            {
+                "type": "CATEGORY",
+                "name": "Товары",
+                "id": "dc8d73c3-e0c0-41df-8c6d-7e654930ce87",
+                "parentId": None,
+                "price": 10
+            }
+        ],
+        "updateDate": "2022-02-01T12:00:00.000Z"
+    },
+    {
+        "items": [
+            {
+                "type": "CATEGORY",
+                "name": "Товары",
+                "id": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+                "parentId": None
+            },
+            {
+                "type": "CATEGORY",
+                "name": "Товары",
+                "id": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+                "parentId": None
+            }
+        ],
+        "updateDate": "2022-02-01T12:00:00.000Z"
+    },
+    {
+        "items": [
+            {
+                "type": "OFFER",
+                "name": "Товары",
+                "id": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+                "parentId": None,
+                "price": 3
+            },
+            {
+                "type": "OFFER",
+                "name": "Товары",
+                "id": "053a716c-4ade-4747-be87-3cd3891403fb",
+                "parentId": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+                "price": 6
+            }
+        ],
+        "updateDate": "2022-02-01T12:00:00.000Z"
+    },
+    {
+        "items": [
+            {
+                "type": "OFFER",
+                "name": "Товары",
+                "id": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+                "parentId": None,
+                "price": 3
+            },
+            {
+                "type": "OFFER",
+                "name": None,
+                "id": "053a716c-4ade-4747-be87-3cd3891403fb",
+                "parentId": None,
+                "price": 6
+            }
+        ],
+        "updateDate": "2022-02-01T12:00:00.000Z"
+    },
+    {
+        "items": [
+            {
+                "type": "OFFER",
+                "name": "Товары",
+                "id": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+                "parentId": None,
+                "price": 3
+            },
+            {
+                "type": "OFFER",
+                "name": "Товары",
+                "id": "053a716c-4ade-4747-be87-3cd3891403fb",
+                "parentId": None,
+                "price": None
+            }
+        ],
+        "updateDate": "2022-02-01T12:00:00.000Z"
+    },
+    {
+        "items": [
+            {
+                "type": "OFFER",
+                "name": "Товары",
+                "id": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+                "parentId": None,
+                "price": 3
+            },
+            {
+                "type": "OFFER",
+                "name": "Товары",
+                "id": "053a716c-4ade-4747-be87-3cd3891403fb",
+                "parentId": None,
+                "price": -1
+            }
+        ],
+        "updateDate": "2022-02-01T12:00:00.000Z"
+    },
+    {
+        "items": [
+            {
+                "type": "OFFER",
+                "name": "Товары",
+                "id": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+                "parentId": None,
+                "price": 3
+            },
+            {
+                "type": "OFFER",
+                "name": "Товары",
+                "id": "053a716c-4ade-4747-be87-3cd3891403fb",
+                "parentId": None,
+                "price": 6
+            }
+        ],
+        "updateDate": "2022-59-01T12:00:00.000Z"
+    },
+]
 
 IMPORT_BATCHES = [
     {
@@ -114,6 +252,32 @@ IMPORT_BATCHES = [
     }
 ]
 
+IMPORT_UPDATE_PARENT = {
+    "items": [
+        {
+            "type": "OFFER",
+            "name": "jPhone 13",
+            "id": "863e1a7a-1304-42ae-943b-179184c077e3",
+            "parentId": None,
+            "price": 79999
+        }
+    ],
+    "updateDate": "2022-02-02T12:00:00.000Z"
+}
+
+IMPORT_UPDATE_PARENT_2 = {
+    "items": [
+        {
+            "type": "OFFER",
+            "name": "jPhone 13",
+            "id": "863e1a7a-1304-42ae-943b-179184c077e3",
+            "parentId": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
+            "price": 79999
+        }
+    ],
+    "updateDate": "2022-02-02T12:00:00.000Z"
+}
+
 EXPECTED_TREE = {
     "type": "CATEGORY",
     "name": "Товары",
@@ -210,6 +374,37 @@ EXPECTED_TREE_2 = {
     "children": []
 }
 
+EXPECTED_TREE_3 ={
+    "type": "CATEGORY",
+    "name": "Смартфоны",
+    "id": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
+    "parentId": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+    "price": 59999,
+    "date": "2022-02-02T12:00:00.000Z",
+    "children": [
+        {
+            "type": "OFFER",
+            "name": "Xomiа Readme 10",
+            "id": "b1d8fd7d-2ae3-47d5-b2f9-0f094af800d4",
+            "parentId": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
+            "price": 59999,
+            "date": "2022-02-02T12:00:00.000Z",
+            "children": None
+        }
+    ]
+}
+
+EXPECTED_TREE_4 = {
+    "type": "OFFER",
+    "name": "jPhone 13",
+    "id": "863e1a7a-1304-42ae-943b-179184c077e3",
+    "parentId": None,
+    "price": 79999,
+    "date": "2022-02-02T12:00:00.000Z",
+    "children": None
+}
+
+
 EXPECTED_SALES_TREE = {
     "items": [
         {
@@ -283,6 +478,13 @@ def print_diff(expected, response):
 
 
 def test_import():
+
+    for index, batch in enumerate(ERROR_IMPORTS):
+        print(f"Importing batch {index}")
+        status, _ = request("/imports", method="POST", data=batch)
+
+        assert status == 400, f"Expected HTTP status code 400, got {status}"
+
     for index, batch in enumerate(IMPORT_BATCHES):
         print(f"Importing batch {index}")
         status, _ = request("/imports", method="POST", data=batch)
@@ -346,12 +548,34 @@ def test_stats():
     assert status == 200, f"Expected HTTP status code 200, got {status}"
     print("Test stats passed.")
 
+def test_import_second():
+
+    status, _ = request("/imports", method="POST", data=IMPORT_UPDATE_PARENT)
+    assert status == 200, f"Expected HTTP status code 200, got {status}"
+
+    status, response = request(f"/nodes/{ROOT_ID_4}", json_response=True)
+    if response != EXPECTED_TREE_3:
+        print_diff(EXPECTED_TREE_3, response)
+        print("Response tree doesn't match expected tree.")
+        sys.exit(1)
+    
+    status, response = request(f"/nodes/{ROOT_ID_5}", json_response=True)
+    if response != EXPECTED_TREE_4:
+        print_diff(EXPECTED_TREE_4, response)
+        print("Response tree doesn't match expected tree.")
+        sys.exit(1)
+
+
+    print("Test import second passed.")
 
 def test_delete():
     status, _ = request(f"/delete/{ROOT_ID}", method="DELETE")
     assert status == 200, f"Expected HTTP status code 200, got {status}"
 
     status, _ = request(f"/nodes/{ROOT_ID}", json_response=True)
+    assert status == 404, f"Expected HTTP status code 404, got {status}"
+
+    status, _ = request(f"/nodes/{ROOT_ID_3}", json_response=True)
     assert status == 404, f"Expected HTTP status code 404, got {status}"
 
     print("Test delete passed.")
@@ -362,6 +586,7 @@ def test_all():
     test_nodes()
     test_sales()
     test_stats()
+    test_import_second()
     test_delete()
 
 
