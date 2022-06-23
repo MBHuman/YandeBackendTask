@@ -4,7 +4,7 @@ API для задания в Школу Бэкэнда Яндекса
 
 ## Структура
 
-```
+```console
 ├── Dockerfile
 ├── README.md
 ├── core

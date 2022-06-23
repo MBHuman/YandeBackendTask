@@ -12,14 +12,14 @@
 ### Требования
 Для запуска проекта надо, чтобы стоял docker с возможностью запуска через
 
-```
+```console
 foo@bar:~$ docker compose
 ...
 ```
 
 Или docker-compose с docker
 
-```
+```console
 foo@bar:~$ docker-compose
 ...
 ```
