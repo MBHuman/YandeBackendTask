@@ -48,5 +48,13 @@ class Diagram;
     Items : +number child_nums -not NULL;
     Items : +number residuals -not NULL;
 
+```
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
 
 ```
