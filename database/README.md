@@ -24,16 +24,16 @@ classDiagram
     Items:- num residuals -not NULL // Не добавлено
 
     class IndexPrimary{
-        + primary, type 'tree', parts = {'id'}, unique= true
+        + primary, type 'tree', parts = 'id', unique= true
     }
     class IndexDateTimestamp{
-        + primary, type 'tree', parts = {'date_timestamp', 'item_type'}, unique= false
+        + primary, type 'tree', parts = 'date_timestamp', 'item_type', unique= false
     }
     class IndexParentId{
-        + primary, type 'tree', parts = {'parent_id', 'is_created}, unique= false
+        + primary, type 'tree', parts = 'parent_id', 'is_created, unique= false
     }
     class IndexCreated{
-        + primary, type 'tree', parts = {'is_created'}, unique= false
+        + primary, type 'tree', parts = 'is_created', unique= false
     }
 ```
 
@@ -44,11 +44,10 @@ classDiagram
 ```mermaid
 class Diagram
 
-    class items{
-        + serial id -not NULL
-        + number child_nums -not NULL
-        + number residuals -not NULL
-        + 
+
+    Items:+ serial id -not NULL
+    Items:+ number child_nums -not NULL
+    Items:+ number residuals -not NULL 
     }
 
 ```
