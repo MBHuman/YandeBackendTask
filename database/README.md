@@ -44,9 +44,9 @@ classDiagram
 ```mermaid
 class Diagram
     class Items
-    Items : +serial id -not NULL
-    Items : +number child_nums -not NULL
-    Items : +number residuals -not NULL 
+    Items : +serial id
+    Items : +number child_nums
+    Items : +number residuals
 
 
 ```
