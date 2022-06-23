@@ -42,7 +42,7 @@ classDiagram
 Она будет выглядет следующим образом:
 
 ```mermaid
-class Diagram
+classDiagram
     class Items
     Items : +serial id
     Items : +number child_nums
