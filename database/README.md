@@ -13,15 +13,15 @@ classDiagram
     Items <|-- IndexParentId
     Items <|-- IndexCreated
 
-    Items:+ string id
-    Items:+ string name
-    Items:+ unsigned item_type
-    Items:+ integer price
-    Items:+ number data_timestamp 
-    Items:+ string parent_id
-    Items:+ boolean is_created
-    Items:+ number child_nums
-    Items:- num residuals
+    Items : +string id
+    Items : +string name
+    Items : +unsigned item_type
+    Items : +integer price
+    Items : +number data_timestamp 
+    Items : +string parent_id
+    Items : +boolean is_created
+    Items : +number child_nums
+    Items : +num residuals
 
     class IndexPrimary{
         + id primary
@@ -43,11 +43,10 @@ classDiagram
 
 ```mermaid
 class Diagram
-
-
-    Items:+ serial id -not NULL
-    Items:+ number child_nums -not NULL
-    Items:+ number residuals -not NULL 
+    class Items
+    Items : +serial id -not NULL
+    Items : +number child_nums -not NULL
+    Items : +number residuals -not NULL 
 
 
 ```
