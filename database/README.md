@@ -7,33 +7,33 @@
 
 ```mermaid
 classDiagram
-
+    class Items
     Items <|-- IndexPrimary
     Items <|-- IndexDateTimestamp
     Items <|-- IndexParentId
     Items <|-- IndexCreated
 
-    Items:+ string id -not NULL
-    Items:+ string name -not NULL
-    Items:+ unsigned item_type -not NULL
-    Items:+ integer price -NULL
-    Items:+ number data_timestamp -not NULL
-    Items:+ string parent_id -NULL
-    Items:+ boolean is_created -not NULL
-    Items:+ number child_nums -not NULL
-    Items:- num residuals -not NULL // Не добавлено
+    Items:+ string id
+    Items:+ string name
+    Items:+ unsigned item_type
+    Items:+ integer price
+    Items:+ number data_timestamp 
+    Items:+ string parent_id
+    Items:+ boolean is_created
+    Items:+ number child_nums
+    Items:- num residuals
 
     class IndexPrimary{
-        + primary, type 'tree', parts = 'id', unique= true
+        + id primary
     }
     class IndexDateTimestamp{
-        + primary, type 'tree', parts = 'date_timestamp', 'item_type', unique= false
+        + date_timestamp date_timestamp
     }
     class IndexParentId{
-        + primary, type 'tree', parts = 'parent_id', 'is_created, unique= false
+        + parent_id__is_created parent_id
     }
     class IndexCreated{
-        + primary, type 'tree', parts = 'is_created', unique= false
+        + is_created created 
     }
 ```
 
@@ -48,6 +48,6 @@ class Diagram
     Items:+ serial id -not NULL
     Items:+ number child_nums -not NULL
     Items:+ number residuals -not NULL 
-    }
+
 
 ```
