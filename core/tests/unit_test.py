@@ -99,6 +99,18 @@ IMPORT_BATCHES = [
             }
         ],
         "updateDate": "2002-05-28T21:12:01.000Z"
+    },
+    {
+        "items": [
+            {
+                "id": "9980d216-b43c-4310-bbf0-169220aeea2b",
+                "name": "Категория",
+                "parentId": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+                "type": "CATEGORY",
+                "price": None
+            }
+        ],
+        "updateDate": "2002-06-28T21:12:01.000Z"
     }
 ]
 
@@ -108,7 +120,7 @@ EXPECTED_TREE = {
     "id": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
     "price": 58599,
     "parentId": None,
-    "date": "2022-02-03T15:00:00.000Z",
+    "date": "2002-06-28T21:12:01.000Z",
     "children": [
         {
             "type": "CATEGORY",
@@ -175,6 +187,16 @@ EXPECTED_TREE = {
                 }
             ]
         },
+        {
+
+            "id": "9980d216-b43c-4310-bbf0-169220aeea2b",
+            "name": "Категория",
+            "parentId": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+            "type": "CATEGORY",
+            "price": None,
+            "date": "2002-06-28T21:12:01.000Z",
+            "children": []
+        }
     ]
 }
 
@@ -186,6 +208,27 @@ EXPECTED_TREE_2 = {
     "price": None,
     "date": "2002-05-28T21:12:01.000Z",
     "children": []
+}
+
+EXPECTED_SALES_TREE = {
+    "items": [
+        {
+            "type": "OFFER",
+            "name": "jPhone 13",
+            "id": "863e1a7a-1304-42ae-943b-179184c077e3",
+            "parentId": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
+            "price": 79999,
+            "date": "2022-02-02T12:00:00.000Z",
+        },
+        {
+            "type": "OFFER",
+            "name": "Xomiа Readme 10",
+            "id": "b1d8fd7d-2ae3-47d5-b2f9-0f094af800d4",
+            "parentId": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
+            "price": 59999,
+            "date": "2022-02-02T12:00:00.000Z",
+        }
+    ]
 }
 
 
@@ -220,6 +263,10 @@ def deep_sort_children(node):
 
         for child in node["children"]:
             deep_sort_children(child)
+
+
+def sort_elems(node):
+    node['items'].sort(key=lambda x: x["id"])
 
 
 def print_diff(expected, response):
@@ -274,10 +321,17 @@ def test_nodes():
 
 def test_sales():
     params = urllib.parse.urlencode({
-        "date": "2022-02-04T00:00:00.000Z"
+        "date": "2022-02-02T13:00:00.000Z"
     })
     status, response = request(f"/sales?{params}", json_response=True)
     assert status == 200, f"Expected HTTP status code 200, got {status}"
+    sort_elems(response)
+    sort_elems(EXPECTED_SALES_TREE)
+    if response != EXPECTED_SALES_TREE:
+        print_diff(EXPECTED_SALES_TREE, response)
+        print("Response tree doesn't match expected tree.")
+        sys.exit(1)
+
     print("Test sales passed.")
 
 

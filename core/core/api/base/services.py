@@ -45,7 +45,6 @@ async def import_service(data: ShopUnitImportRequest):
     date_timestamp = parse_datetime(data.updateDate).timestamp()
     formated_data = ShopUnitImportRequestFormated(items=items,
                                                   updateDate=date_timestamp)
-    log.info(formated_data)
     result = await db.run("api_write.imports", formated_data.dict())
 
 
@@ -57,7 +56,6 @@ async def delete_serice(id: UUID):
 @public
 async def nodes_service(id: UUID):
     result = await db.run("api_read.nodes", str(id))
-    log.info(result)
     mp = {}
     if len(result[0]) == 0:
         raise ItemNotFound()
@@ -81,7 +79,7 @@ async def nodes_service(id: UUID):
                                 type=typeUnit, price=(mp[id_in][1] // mp[id_in][2]), children=mp[id_in][0]))
             del mp[id_in]
         else:
-            mp[parentId][2] += 1
+            mp[parentId][2] += (0 if typeUnit == 'CATEGORY' else 1)
             mp[parentId][1] += (0 if typeUnit == 'CATEGORY' else price)
             mp[parentId][0].append(ShopUnit(
                 id=id_in, name=name, date=date, parentId=parentId, type=typeUnit, price=(None if typeUnit == 'CATEGORY' else price), children=([] if typeUnit == 'CATEGORY' else None)))
