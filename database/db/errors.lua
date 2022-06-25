@@ -11,8 +11,6 @@ local _M = {}
 local ErrorsClass = {}
 
 --- Регистрация ошибка
--- @param code string: строковый идентификатор ошибки
--- @param func string: название функции/метода в котором используется ошибка
 function ErrorsClass:register(func, code)
     checks('table', 'string', 'number')
     local mod = debug.getinfo(2, "S").source
@@ -30,7 +28,6 @@ function ErrorsClass:register(func, code)
 end
 
 --- Получение ошибки по коду, нужно вызывать в том же методе
--- @param code string: строковый идентификатор ошибки
 function ErrorsClass:get(file, func, code)
     checks('table', 'string', 'string', 'number')
     
@@ -53,8 +50,6 @@ function _M.new(data)
     setmetatable(self, { __index = ErrorsClass })
     return self
 end
-
-
 
 
 return _M
