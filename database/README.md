@@ -48,7 +48,9 @@ classDiagram
 ```mermaid
 classDiagram
     class Stats
+    Stats <|-- IndexPrimary
     Stats <|-- IndexCreated
+    Stats <|-- IndexItemId
 
     Stats : +serial id
     Stats : +strign uuid
