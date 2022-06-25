@@ -9,11 +9,11 @@ function sales(from_timestamp, to_timestamp)
     local result = {}
 
     for _, e in box.space.items.index.date_timestamp:pairs({to_timestamp, ITEM_TYPE['OFFER']}, {iterator='LE'}) do
+        if e.date_timestamp < from_timestamp then
+            goto continue 
+        end
         if e.item_type == ITEM_TYPE.OFFER then
             table.insert(result, e)
-        end
-        if e.date_timestamp <= from_timestamp then
-            goto continue 
         end
     end
     ::continue::

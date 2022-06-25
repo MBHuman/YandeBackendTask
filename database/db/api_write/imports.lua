@@ -79,9 +79,10 @@ local function imports(request)
             box.space.items.index.primary:update(id, {{'=', 6, parentId}})
         end
 
-        box.space.items.index.primary:update(id, {{'=', 2, name}, -- name
-        {'=', 5, updateDate}, -- updateDate
-        {'=', 7, true}})
+        box.space.items.index.primary:update(id, {
+            {'=', 2, name}, -- name
+            {'=', 5, updateDate}, -- updateDate
+        })
         local q = util.Queue:new()
         q:enqueue(id)
 
